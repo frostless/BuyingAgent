@@ -17,7 +17,7 @@ class HomeView extends Component {
   };
   state = {
     visitId: null,
-    productCatIndex: null,
+    productCatIndex: 0,
     productDic: {},
     customerDic: {},
     postDic: {},
@@ -166,7 +166,6 @@ class HomeView extends Component {
         <SegmentedControlTab
           values={['Baby Formula', 'Supplements']}
           selectedIndex={this.state.productCatIndex}
-          defaultValue='Baby Formula'
           onTabPress={(index) => {
             this.setState({
               productCatIndex: index,
@@ -183,7 +182,6 @@ class HomeView extends Component {
           style={{ marginBottom: 8 }}
           values={['Baby Formula', 'Supplements']}
           selectedIndex={this.state.productCatIndex}
-          defaultValue='Baby Formula'
           onChange={(event) => {
             this.setState({ productCatIndex: event.nativeEvent.selectedSegmentIndex });
             this.ResetProducts();
