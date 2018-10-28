@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert, TextInput, TouchableHighlight, SegmentedControlIOS, ActivityIndicator,Platform } from 'react-native';
+import { Text, View, StyleSheet, Alert, TextInput, TouchableHighlight, ActivityIndicator,Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { getInitialInfoAsyn } from '../services/FetchInitialData'
 import renderIf from '../services/RenderIf'
 import { AddNewVisit, AddNewTransaction, PatchNewVisit } from '../services/AddNew'
-import SegmentedControlTab from 'react-native-segmented-control-tab'
+import SegmentedControl from './SegmentedControl'
 
 class HomeView extends Component {
   constructor(props) {
@@ -160,37 +160,6 @@ class HomeView extends Component {
     PatchNewVisit.call(this, this.state.visitId, time);
   }
 
-  _segmentPicker() {
-    if (Platform.OS == 'android') {
-      return (
-        <SegmentedControlTab
-          values={['Baby Formula', 'Supplements']}
-          selectedIndex={this.state.productCatIndex}
-          onTabPress={(index) => {
-            this.setState({
-              productCatIndex: index,
-            });
-            this.ResetProducts();
-          }
-          }
-          tabStyle={{ marginBottom: 8 }}
-        />
-      );
-    } else if (Platform.OS == 'ios') {
-      return (
-        <SegmentedControlIOS
-          style={{ marginBottom: 8 }}
-          values={['Baby Formula', 'Supplements']}
-          selectedIndex={this.state.productCatIndex}
-          onChange={(event) => {
-            this.setState({ productCatIndex: event.nativeEvent.selectedSegmentIndex });
-            this.ResetProducts();
-          }}
-        />
-      );
-    }
-  }
-
   render() {
     return (
       <KeyboardAwareScrollView
@@ -248,14 +217,24 @@ class HomeView extends Component {
         >
         </ModalDropdown>
 
-        {this._segmentPicker()}
+        <SegmentedControl
+          productCatIndex={this.state.productCatIndex}
+          callbackiOS={(event) => {
+            this.setState({ productCatIndex: event.nativeEvent.selectedSegmentIndex });
+            this.ResetProducts();
+          }}
+          callbackAndroid={(index) => {
+            this.setState({productCatIndex: index});
+            this.ResetProducts();
+          }}
+        />
 
         <View style={styles.row}>
           {renderIf(this.state.p1Num != null)(
             <Text>{this.state.p1Num}</Text>
           )}
           <TextInput
-            style={{ height: 20, width: 50, borderColor: 'gray', borderWidth: 1 }}
+            style={styles.textInput} 
             keyboardType='numeric'
             maxLength={1}  //setting limit of input
             onChangeText={(text) => {
@@ -282,7 +261,7 @@ class HomeView extends Component {
             <Text>{this.state.p2Num}</Text>
           )}
           <TextInput
-            style={{ height: 20, width: 50, borderColor: 'gray', borderWidth: 1 }}
+            style={styles.textInput} 
             keyboardType='numeric'
             maxLength={1}  //setting limit of input
             onChangeText={(text) => {
@@ -310,7 +289,7 @@ class HomeView extends Component {
             <Text>{this.state.p3Num}</Text>
           )}
           <TextInput
-            style={{ height: 20, width: 50, borderColor: 'gray', borderWidth: 1 }}
+            style={styles.textInput} 
             underlineColorAndroid='transparent'
             keyboardType='numeric'
             maxLength={1}  //setting limit of input
@@ -396,7 +375,7 @@ class HomeView extends Component {
             <View style={styles.row}>
               <Text>Total Price :</Text>
               <TextInput
-                style={{ height: 20, width: 50, borderColor: 'gray', borderWidth: 1 }}
+                style={styles.textInput} 
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
                 onChangeText={(text) => {
@@ -411,7 +390,7 @@ class HomeView extends Component {
             <View style={styles.row}>
               <Text>Total Charged :</Text>
               <TextInput
-                style={{ height: 20, width: 50, borderColor: 'gray', borderWidth: 1 }}
+                style={styles.textInput} 
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
                 onChangeText={(text) => {
@@ -426,7 +405,7 @@ class HomeView extends Component {
             <View style={styles.row}>
               <Text>Total Profit :</Text>
               <TextInput
-                style={{ height: 20, width: 50, borderColor: 'gray', borderWidth: 1 }}
+                style={styles.textInput} 
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
                 onChangeText={(text) => {
@@ -517,6 +496,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  textInput:{
+    height: 20, 
+    width: 50, 
+    borderColor: 'gray', 
+    borderWidth: 1 ,
+    ...Platform.select({
+      android: { paddingVertical: 0}
+    }),
   }
 })
 
