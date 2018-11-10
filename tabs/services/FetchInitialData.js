@@ -30,7 +30,9 @@ export function getInitialInfoAsyn() {
  
   function createProducts(){
     var oriArr = this.state.initialInfo['products'];
-    var arr = [];
+    let products = [];
+    let formulaArr = [];
+    let supplementsArr = [];
     var obj = {};
     for(var i = 0; i < oriArr.length; i++){
       var priceObj = {};
@@ -38,10 +40,15 @@ export function getInitialInfoAsyn() {
       priceObj['charged'] = oriArr[i]['charged'];
       priceObj['id'] = oriArr[i]['id'];
       priceObj['profit'] = oriArr[i]['profit'];
-     obj[oriArr[i]['name']] = priceObj;
-     arr.push(oriArr[i]['name'])
+      obj[oriArr[i]['name']] = priceObj;
+     
+      if (oriArr[i]['categoryId'] == "1")
+        formulaArr.push(oriArr[i]['name'])
+      else
+        supplementsArr.push(oriArr[i]['name'])
   }
-  this.state.products = arr;
+  this.state.formula = this.state.products = formulaArr;
+  this.state.supplements = supplementsArr;
   this.state.productDic = obj;
 }
 

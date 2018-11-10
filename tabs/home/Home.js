@@ -30,7 +30,9 @@ class HomeView extends Component {
     p1Num: null,
     p2Num: null,
     p3Num: null,
-    products: ['null'],
+    products:['null'],
+    formula: ['null'],
+    supplements:['null'],
     post: null,
     posts: ['null'],
     shops: ['null'],
@@ -39,7 +41,7 @@ class HomeView extends Component {
     totalPrice: null,
     totalCharged: null,
     totalProfit: null,
-    isVisitEndable: false,
+    isVisitEnabled: false,
     isLoading: false
   }
   baseState = this.state;//copy of the initial state
@@ -148,6 +150,10 @@ class HomeView extends Component {
     this.ResetEstimation();
   }
 
+  ResetProductCategory(index){
+    index == 0 ? this.setState({ products: this.state.formula }) : this.setState({ products: this.state.supplements });
+  }
+
   ResetEstimation() {
     this.setState({ totalPrice: null })
     this.setState({ totalCharged: null })
@@ -220,11 +226,14 @@ class HomeView extends Component {
         <SegmentedControl
           productCatIndex={this.state.productCatIndex}
           callbackiOS={(event) => {
-            this.setState({ productCatIndex: event.nativeEvent.selectedSegmentIndex });
+            let index = event.nativeEvent.selectedSegmentIndex;
+            this.setState({ productCatIndex: index });
+            this.ResetProductCategory(index);
             this.ResetProducts();
           }}
           callbackAndroid={(index) => {
             this.setState({productCatIndex: index});
+            this.ResetProductCategory(index);
             this.ResetProducts();
           }}
         />
@@ -427,7 +436,7 @@ class HomeView extends Component {
           </TouchableHighlight>
         )}
 
-        {renderIf(this.state.isVisitEndable)(
+        {renderIf(this.state.isVisitEnabled)(
           <TouchableHighlight
             style={styles.button}
             onPress={() => this.OnEndBtnClicked()}
