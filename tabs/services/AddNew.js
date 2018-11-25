@@ -55,7 +55,7 @@ export function AddNewTransaction(objToSend){
   body: JSON.stringify(objToSend),
 }).then((responseJson) => {
   this.setState({
-    isVisitEndable:true,
+    isVisitEnabled:true,
     isLoading:false
   });
   this.CleanUp(false);
