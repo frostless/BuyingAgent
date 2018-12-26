@@ -1,7 +1,7 @@
 const pieChartColors = ['#600080','#9900cc','#1100fc','#100080','#300080'];
 
 export function getTopCustomer() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/topCustomer')
+  return fetch(`${apiURL}/api/reports/topCustomer`)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ 
@@ -14,7 +14,7 @@ export function getTopCustomer() {
     });
 }
 export function getTopProduct() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/topProduct')
+  return fetch(`${apiURL}/api/reports/topProduct`)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ 
@@ -27,7 +27,7 @@ export function getTopProduct() {
     });
 }
 export function getTopPost() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/topPost')
+  return fetch(`${apiURL}/api/reports/topPost`)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ 
@@ -40,7 +40,7 @@ export function getTopPost() {
     });
 }
 export function getTopVisit() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/topVisit')
+  return fetch(`${apiURL}/api/reports/topVisit`)
     .then((response) => response.json())
     .then((responseJson) => {
       responseJson['date'] = responseJson['date'].split(' ')[0];//get the //dd//mm//yy format
@@ -54,7 +54,7 @@ export function getTopVisit() {
     });
 }
 export function getTransactionsNum() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/transactionsNum')
+  return fetch(`${apiURL}/api/reports/transactionsNum`)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ 
@@ -67,7 +67,7 @@ export function getTransactionsNum() {
     });
 }
 export function getVisitsNum() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/visitsNum')
+  return fetch(`${apiURL}/api/reports/visitsNum`)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ 
@@ -80,7 +80,7 @@ export function getVisitsNum() {
     });
 }
 export function getAllProfit() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/allProfit')
+  return fetch(`${apiURL}/api/reports/allProfit`)
     .then((response) => response.json())
     .then((responseJson) => {
       this.setState({ 
@@ -93,7 +93,7 @@ export function getAllProfit() {
     });
 }
 export function getMonthsProfit() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/monthsProfit')
+  return fetch(`${apiURL}/api/reports/monthsProfit`)
     .then((response) => response.json())
     .then((responseJson) => {
       var arr = [];
@@ -111,7 +111,7 @@ export function getMonthsProfit() {
     });
 }
 export function getFormulaProfit() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/formulaProfit')
+  return fetch(`${apiURL}/api/reports/formulaProfit`)
     .then((response) => response.json())
     .then((responseJson) => {
       return responseJson;
@@ -121,7 +121,7 @@ export function getFormulaProfit() {
     });
 }
 export function getSupplementsProfit() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/supplementsProfit')
+  return fetch(`${apiURL}/api/reports/supplementsProfit`)
     .then((response) => response.json())
     .then((responseJson) => {
       return responseJson;
@@ -132,7 +132,7 @@ export function getSupplementsProfit() {
 }
 
 export function getTopFiveCustomers() {
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/reports/topfivecustomers')
+  return fetch(`${apiURL}/api/reports/topfivecustomers`)
     .then((response) => response.json())
     .then((responseJson) => {
       let datatoReturn= [];

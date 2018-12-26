@@ -5,7 +5,7 @@ import { getTopCustomer, getTopProduct, getTopVisit, getTopPost, getTransactions
 import renderIf from '../services/RenderIf';
 import * as scale from 'd3-scale'
 import { Text as SVGChartText} from 'react-native-svg';
-
+import StatusBarBackground from '../customComponents/StatusBarBackground'
 
 class ReportView extends React.PureComponent {
 
@@ -48,6 +48,7 @@ class ReportView extends React.PureComponent {
       <View>
 
         <ScrollView style={styles.view}>
+        <StatusBarBackground></StatusBarBackground>
 
           {renderIf(this.state.topCustomer['name'])(
             <Text style={styles.reportText}>{"name:" + this.state.topCustomer['name']}{" profit:" + this.state.topCustomer['profit']}</Text>
@@ -246,7 +247,7 @@ export default ReportView
 
 const styles = StyleSheet.create({
   view: {
-    marginTop: 8,
+    padding:20
   },
   reportText: {
     textAlign: 'center', // <-- the magic

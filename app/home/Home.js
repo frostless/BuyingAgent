@@ -5,16 +5,15 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { getInitialInfoAsyn } from '../services/FetchInitialData'
 import renderIf from '../services/RenderIf'
 import { AddNewVisit, AddNewTransaction, PatchNewVisit } from '../services/AddNew'
-import SegmentedControl from './SegmentedControl'
+import SegmentedControl from '../customComponents/SegmentedControl'
+import StatusBarBackground from '../customComponents/StatusBarBackground'
+import {TimeGenerator} from '../services/Helpers'
 
 class HomeView extends Component {
   constructor(props) {
     super(props);
     getInitialInfoAsyn.call(this);
   }
-  static navigationOptions = {
-    header: null
-  };
   state = {
     visitId: null,
     productCatIndex: 0,
@@ -22,7 +21,7 @@ class HomeView extends Component {
     customerDic: {},
     postDic: {},
     initialInfo: {},
-    customers: ['null'],
+    customers: [],
     customer: null,
     product1: null,
     product2: null,
@@ -30,12 +29,12 @@ class HomeView extends Component {
     p1Num: null,
     p2Num: null,
     p3Num: null,
-    products: ['null'],
-    formula: ['null'],
-    supplements: ['null'],
+    products: [],
+    formula: [],
+    supplements: [],
     post: null,
-    posts: ['null'],
-    shops: ['null'],
+    posts: [],
+    shops: [],
     shopDic: {},
     shop: null,
     totalPrice: null,
@@ -57,11 +56,9 @@ class HomeView extends Component {
     let p3ProductProfit = this.state.product3 ? Number(this.state.productDic[this.state.product3]['profit']) : 0;
 
     let price = (Number(this.state.p1Num)) * p1ProductPrice + (Number(this.state.p2Num)) * p2ProductPrice + (Number(this.state.p3Num)) * p3ProductPrice;
-    this.setState({ totalPrice: price.toFixed(2) });
     var charged = (Number(this.state.p1Num)) * p1ProductCharged + (Number(this.state.p2Num)) * p2ProductCharged + (Number(this.state.p3Num)) * p3ProductCharged;
-    this.setState({ totalCharged: charged.toFixed(2) });
     var profit = (Number(this.state.p1Num)) * p1ProductProfit + (Number(this.state.p2Num)) * p2ProductProfit + (Number(this.state.p3Num)) * p3ProductProfit;
-    this.setState({ totalProfit: profit.toFixed(2) });
+    this.setState({ totalPrice: price.toFixed(2), totalCharged: charged.toFixed(2), totalProfit: profit.toFixed(2) });
   }
   ShouldCalculate() {
     // if(this.state.p1Num!=null&&this.state.p2Num!=null&&this.state.product1!=null&&this.state.product2!=null) return true;
@@ -73,17 +70,6 @@ class HomeView extends Component {
     if (this.ShouldCalculate() && this.state.totalCharged != '0.00' && this.state.visitId && this.state.post && this.state.customer) return true;
     return false
   }
-  TimeGenerator(ifFullTimeRequired) {
-    var date = new Date();
-    var day = date.getDate();       // yields date
-    var month = date.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
-    var year = date.getFullYear();  // yields year
-    var hour = date.getHours() > 10 ? date.getHours() : '0' + date.getHours();     // yields hours 
-    var minute = date.getMinutes() > 10 ? date.getMinutes() : '0' + date.getMinutes(); // yields minutes
-    var second = date.getSeconds() > 10 ? date.getSeconds() : '0' + date.getSeconds(); // yields seconds
-    if (ifFullTimeRequired) return year + "/" + month + "/" + day + "T" + hour + ':' + minute + ':' + second;
-    return year + "/" + month + "/" + day;
-  }
   OnStartVisitClicked() {
     //user needs to select shop first to start visit
     if (!this.state.shop) {
@@ -92,7 +78,7 @@ class HomeView extends Component {
     }
     this.setState({ isLoading: true });
     //show indicator
-    var time = this.TimeGenerator(true);
+    var time = TimeGenerator(true);
     var shopId = this.state.shopDic[this.state.shop];
     
     AddNewVisit.call(this, time, shopId);// send the shopId
@@ -105,7 +91,7 @@ class HomeView extends Component {
     if (this.state.product2 && this.state.p2Num) productsInfo[this.state.productDic[this.state.product2]['id']] = this.state.p2Num;
     if (this.state.product3 && this.state.p3Num) productsInfo[this.state.productDic[this.state.product3]['id']] = this.state.p3Num;
     objToSend['ProductsInfo'] = productsInfo;
-    objToSend['TransactionTime'] = this.TimeGenerator(false);
+    objToSend['TransactionTime'] = TimeGenerator(false);
     objToSend['Price'] = this.state.totalPrice;
     objToSend['Profit'] = this.state.totalProfit;
     objToSend['Charged'] = this.state.totalCharged;
@@ -136,12 +122,7 @@ class HomeView extends Component {
   }
   ResetProducts() {
     //text inoput
-    this.setState({ p1Num: null })
-    this.setState({ p2Num: null })
-    this.setState({ p3Num: null })
-    this.setState({ product1: null })
-    this.setState({ product2: null })
-    this.setState({ product3: null })
+    this.setState({ p1Num: null, p2Num: null,p3Num: null,product1: null,product2: null ,product3: null})
     //drop down
     this.refs['dropdown_product1'].select(-1);
     this.refs['dropdown_product2'].select(-1);
@@ -155,14 +136,12 @@ class HomeView extends Component {
   }
 
   ResetEstimation() {
-    this.setState({ totalPrice: null })
-    this.setState({ totalCharged: null })
-    this.setState({ totalProfit: null })
+    this.setState({ totalPrice: null,totalCharged: null,totalProfit: null });
   }
 
   OnEndBtnClicked() {
     this.setState({ isLoading: true });
-    var time = this.TimeGenerator(true);
+    var time = TimeGenerator(true);
     PatchNewVisit.call(this, this.state.visitId, time);
   }
 
@@ -174,6 +153,7 @@ class HomeView extends Component {
         contentContainerStyle={styles.view}
       // scrollEnabled={false}
       >
+      <StatusBarBackground></StatusBarBackground>
         {renderIf(this.state.visitId == null && this.state.initialInfo != null)(
           <TouchableHighlight
             style={styles.button}
@@ -225,6 +205,7 @@ class HomeView extends Component {
 
         <SegmentedControl
           productCatIndex={this.state.productCatIndex}
+          customStyle={{ marginBottom: 8}}
           callbackiOS={(event) => {
             let index = event.nativeEvent.selectedSegmentIndex;
             this.setState({ productCatIndex: index });

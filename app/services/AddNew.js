@@ -1,5 +1,5 @@
 export function AddNewVisit(time,shopId){
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/addnew/newVisit',{
+  return fetch(`${apiURL}api/addnew/newVisit`,{
   method: 'POST',
   headers: {
     Accept: 'application/json',
@@ -21,7 +21,7 @@ export function AddNewVisit(time,shopId){
 }
 
 export function PatchNewVisit(visitId,finishedTime){
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/update/visit/' + visitId,{
+  return fetch(`${apiURL}/api/update/visit/` + visitId,{
   method: 'Patch',
   headers: {
     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export function PatchNewVisit(visitId,finishedTime){
 
 
 export function AddNewTransaction(objToSend){
-  return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/addnew/newTransaction',{
+  return fetch(`${apiURL}/api/addnew/newTransaction`,{
   method: 'POST',
   headers: {
     Accept: 'application/json',

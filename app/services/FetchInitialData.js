@@ -1,7 +1,7 @@
 
 
 export function getInitialInfoAsyn() {
-    return fetch('http://buyingagentba-9tmjk-env.ap-southeast-2.elasticbeanstalk.com/api/initialinfo/')
+    return fetch(`${apiURL}/api/initialinfo/`)
       .then((response) => response.json())
       .then((responseJson) => {
         this.state.initialInfo = responseJson;

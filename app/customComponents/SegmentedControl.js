@@ -9,7 +9,7 @@ export default class SegmentedControl extends Component {
         if (Platform.OS == 'ios') {
             return (
                 <SegmentedControlIOS
-                    style={{ marginBottom: 8 }}
+                    style={this.props.customStyle}
                     values={['Baby Formula', 'Supplements']}
                     selectedIndex={this.props.productCatIndex}
                     onChange={(event) => {
