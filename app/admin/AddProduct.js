@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
     multilineInput: {
         width: 250,
         borderBottomColor: 'gray',
+        textAlignVertical:'top',
         marginLeft: 8,
         borderBottomWidth: 1,
     },
