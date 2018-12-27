@@ -65,24 +65,14 @@ class AdminView extends React.Component {
 }
 
 export default createStackNavigator({
-  Home: {
-    screen: AdminView
-  },
-  Products: {
-    screen: ProductsDetailsView
-  },
-  EditProduct: {
-    screen: EditProductView
-  },
-  Customers: {
-    screen: CustomersDetailsView
-  },
-  EditCustomer: {
-    screen: EditCustomerView
-  }
+  AdminRoot: AdminView,
+  Products: ProductsDetailsView,
+  EditProduct: EditProductView,
+  Customers: CustomersDetailsView,
+  EditCustomer: EditCustomerView
 }, {
-    initialRouteName: 'Home'
-  });
+    initialRouteName: 'AdminRoot'
+  })
 
 const styles = StyleSheet.create({
   container: {
