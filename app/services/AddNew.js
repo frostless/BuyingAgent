@@ -1,5 +1,5 @@
 export function AddNewVisit(time,shopId){
-  return fetch(`${apiURL}api/addnew/newVisit`,{
+  return fetch(`${apiURL}/api/addnew/newVisit`,{
   method: 'POST',
   headers: {
     Accept: 'application/json',
@@ -21,7 +21,7 @@ export function AddNewVisit(time,shopId){
 }
 
 export function PatchNewVisit(visitId,finishedTime){
-  return fetch(`${apiURL}/api/update/visit/` + visitId,{
+  return fetch(`${apiURL}/api/update/visit/${visitId}`{
   method: 'Patch',
   headers: {
     'Content-Type': 'application/json',
