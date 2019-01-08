@@ -5,6 +5,9 @@ import ProductsDetailsView from './ProductsDetails'
 import CustomersDetailsView from './CustomersDetails'
 import EditCustomerView from './EditCustomer'
 import EditProductView from './EditProduct'
+import VisitsDetailsView from './VisitsDetails'
+import TransactionssDetailsView from './TransactionsDetails'
+import CategoriesDetailsView from './CategoriesDetails'
 
 class AdminView extends React.Component {
     static navigationOptions = {
@@ -69,7 +72,10 @@ export default createStackNavigator({
   Products: ProductsDetailsView,
   EditProduct: EditProductView,
   Customers: CustomersDetailsView,
-  EditCustomer: EditCustomerView
+  EditCustomer: EditCustomerView,
+  Visits: VisitsDetailsView,
+  Transactions: TransactionssDetailsView,
+  Categories:CategoriesDetailsView
 }, {
     initialRouteName: 'AdminRoot'
   })
