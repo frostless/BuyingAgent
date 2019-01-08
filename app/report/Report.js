@@ -45,9 +45,9 @@ class ReportView extends React.PureComponent {
       })
   }
     return (
-      <View>
+      <View style={styles.view}>
 
-        <ScrollView style={styles.view}>
+        <ScrollView>
         <StatusBarBackground></StatusBarBackground>
 
           {renderIf(this.state.topCustomer['name'])(
