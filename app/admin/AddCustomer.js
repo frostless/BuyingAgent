@@ -16,52 +16,56 @@ export default class AddCustomer extends Component {
     }
 
     AddNewCustomer(name, province, gender, relationship, customerSince) {
-        return fetch(`${apiURL}/api/addnew/newcustomer`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                province: province,
-                gender: gender,
-                relationship: relationship,
-                customerSince: customerSince
-            }),
-        }).then(async (response) => {
-            if (response.status == 200) {
-                let responseJson = await response.json();
-                Alert.alert(
-                    'BuyingAgent',
-                    `${name} has been added to the system successfully!`,
-                    [
-                        {
-                            text: 'Confirm', onPress: () => {
-                                let customerNew = {
-                                    id: responseJson.id,
-                                    name: this.state.name,
-                                    province: this.state.province,
-                                    gender: this.state.gender,
-                                    relationship: this.state.relationship,
-                                    customerSince: this.state.customerSince
+        token(this.props.navigation).then((token) => {
+            if(!token) return;
+            return fetch(`${apiURL}/api/addnew/newcustomer`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({
+                    name: name,
+                    province: province,
+                    gender: gender,
+                    relationship: relationship,
+                    customerSince: customerSince
+                }),
+            }).then(async (response) => {
+                if (response.status == 200) {
+                    let responseJson = await response.json();
+                    Alert.alert(
+                        'BuyingAgent',
+                        `${name} has been added to the system successfully!`,
+                        [
+                            {
+                                text: 'Confirm', onPress: () => {
+                                    let customerNew = {
+                                        id: responseJson.id,
+                                        name: this.state.name,
+                                        province: this.state.province,
+                                        gender: this.state.gender,
+                                        relationship: this.state.relationship,
+                                        customerSince: this.state.customerSince
+                                    }
+                                    this.props.AddHandler(customerNew)
                                 }
-                                this.props.AddHandler(customerNew)
-                            }
-                            , style: 'default'
-                        },
-                    ],
-                    { cancelable: false }
-                )
-            }
-            else Alert.alert('An error occured, please try again')
-            this.setState({ isLoading: false });
-        })
-            .catch((error) => {
-                Alert.alert(error)
-                console.error(error);
+                                , style: 'default'
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+                else Alert.alert('An error occured, please try again')
                 this.setState({ isLoading: false });
-            });
+            })
+                .catch((error) => {
+                    Alert.alert(error)
+                    console.error(error);
+                    this.setState({ isLoading: false });
+                });
+        })
     }
 
     render() {

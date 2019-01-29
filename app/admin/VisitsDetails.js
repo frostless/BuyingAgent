@@ -19,30 +19,34 @@ export default class VisitsDetailsView extends Component {
   }
 
   DeleteEntity(id, index) {
-    return fetch(`${apiURL}/api/delete/`, {
-      method: 'Delete',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        entity: 'visit',
-        id: id
-      }),
-    }).then((response) => {
-      if (response.status == 200) {
-        let visitsNew = this.state.visits;
-        visitsNew.splice(index, 1);
-        this.setState({ visits: visitsNew }, () => this.forceUpdate());
-      }
-      else Alert.alert('An error occured, please try again')
-      this.setState({ isLoading: false });
-    })
-      .catch((error) => {
-        Alert.alert(error)
-        console.error(error);
+    token(this.props.navigation).then((token) => {
+      if(!token) return;
+      return fetch(`${apiURL}/api/delete/`, {
+        method: 'Delete',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          entity: 'visit',
+          id: id
+        }),
+      }).then((response) => {
+        if (response.status == 200) {
+          let visitsNew = this.state.visits;
+          visitsNew.splice(index, 1);
+          this.setState({ visits: visitsNew }, () => this.forceUpdate());
+        }
+        else Alert.alert('An error occured, please try again')
         this.setState({ isLoading: false });
-      });
+      })
+        .catch((error) => {
+          Alert.alert(error)
+          console.error(error);
+          this.setState({ isLoading: false });
+        });
+    })
   }
 
   state = {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableHighlight, Alert, ActivityIndicator,Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableHighlight, Alert, ActivityIndicator, Dimensions } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getAllProductsAsyn } from '../services/FetchManage'
 import SegmentedControl from '../customComponents/SegmentedControl'
@@ -18,11 +18,11 @@ export default class ProductsDetailsView extends Component {
   }
 
   componentDidMount() {
-    this.mounted = true; 
+    this.mounted = true;
     getAllProductsAsyn.call(this);
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.mounted = false; //anti pattern https://stackoverflow.com/questions/49906437/how-to-cancel-a-fetch-on-componentwillunmount
   }
 
@@ -34,30 +34,34 @@ export default class ProductsDetailsView extends Component {
   };
 
   DeleteEntity(id, index) {
-    return fetch(`${apiURL}/api/delete/`, {
-      method: 'Delete',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        entity: 'product',
-        id: id
-      }),
-    }).then((response) => {
-      if (response.status == 200) {
-        let productsNew = this.state.products;
-        productsNew.splice(index, 1);
-        this.setState({ prodcuts: productsNew }, () => this.forceUpdate());
-      }
-      else Alert.alert('An error occured, please try again')
-      this.setState({ isLoading: false });
-    })
-      .catch((error) => {
-        Alert.alert(error)
-        console.error(error);
+    token(this.props.navigation).then((token) => {
+      if(!token) return;
+      return fetch(`${apiURL}/api/delete/`, {
+        method: 'Delete',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          entity: 'product',
+          id: id
+        }),
+      }).then((response) => {
+        if (response.status == 200) {
+          let productsNew = this.state.products;
+          productsNew.splice(index, 1);
+          this.setState({ prodcuts: productsNew }, () => this.forceUpdate());
+        }
+        else Alert.alert('An error occured, please try again')
         this.setState({ isLoading: false });
-      });
+      })
+        .catch((error) => {
+          Alert.alert(error)
+          console.error(error);
+          this.setState({ isLoading: false });
+        });
+    })
   }
 
   AddHandler(productNew) {
@@ -133,7 +137,7 @@ export default class ProductsDetailsView extends Component {
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={styles.view}
       >
-        <View style={{ paddingLeft: 20, paddingRight: 20, minHeight:Dimensions.get('window').height }}>
+        <View style={{ paddingLeft: 20, paddingRight: 20, minHeight: Dimensions.get('window').height }}>
           <SegmentedControl
             customStyle={{ marginBottom: 8, marginTop: 8 }}
             callbackiOS={(event) => {

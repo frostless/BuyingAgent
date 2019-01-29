@@ -33,30 +33,34 @@ export default class CustomersDetailsView extends Component {
   };
 
   DeleteEntity(id, index) {
-    return fetch(`${apiURL}/api/delete/`, {
-      method: 'Delete',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        entity: 'customer',
-        id: id
-      }),
-    }).then((response) => {
-      if (response.status == 200) {
-        let customersNew = this.state.customers;
-        customersNew.splice(index, 1);
-        this.setState({ customers: customersNew }, () => this.forceUpdate());
-      }
-      else Alert.alert('An error occured, please try again')
-      this.setState({ isLoading: false });
-    })
-      .catch((error) => {
-        Alert.alert(error)
-        console.error(error);
+    token(this.props.navigation).then((token) => {
+      if(!token) return;
+      return fetch(`${apiURL}/api/delete/`, {
+        method: 'Delete',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          entity: 'customer',
+          id: id
+        }),
+      }).then((response) => {
+        if (response.status == 200) {
+          let customersNew = this.state.customers;
+          customersNew.splice(index, 1);
+          this.setState({ customers: customersNew }, () => this.forceUpdate());
+        }
+        else Alert.alert('An error occured, please try again')
         this.setState({ isLoading: false });
-      });
+      })
+        .catch((error) => {
+          Alert.alert(error)
+          console.error(error);
+          this.setState({ isLoading: false });
+        });
+    })
   }
 
   AddHandler(customerNew) {

@@ -90,31 +90,35 @@ export default class EditCustomer extends Component {
     }
 
     EditCustomer(opArr) {
-        return fetch(`${apiURL}/api/update/customer/${this.state.customerId}`, {
-            method: 'PATCH',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(opArr),
-        }).then(async (response) => {
-            if (response.status == 204) {
-                Alert.alert(
-                    'BuyingAgent',
-                    `${this.state.name} has been edited successfully!`,
-                )
-            }
-            else {
-                Alert.alert('An error occured, please try again');
-                console.error(response)
-            }
-            this.setState({ isLoading: false, isCustomerUpdatedInDB: true });
+        token(this.props.navigation).then((token) => {
+            if(!token) return;
+            return fetch(`${apiURL}/api/update/customer/${this.state.customerId}`, {
+                method: 'PATCH',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(opArr),
+            }).then(async (response) => {
+                if (response.status == 204) {
+                    Alert.alert(
+                        'BuyingAgent',
+                        `${this.state.name} has been edited successfully!`,
+                    )
+                }
+                else {
+                    Alert.alert('An error occured, please try again');
+                    console.error(response)
+                }
+                this.setState({ isLoading: false, isCustomerUpdatedInDB: true });
+            })
+                .catch((error) => {
+                    Alert.alert(error)
+                    console.error(error);
+                    this.setState({ isLoading: false });
+                });
         })
-            .catch((error) => {
-                Alert.alert(error)
-                console.error(error);
-                this.setState({ isLoading: false });
-            });
     }
 
     render() {

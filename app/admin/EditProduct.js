@@ -108,31 +108,35 @@ export default class EditProduct extends Component {
     }
 
     EditProduct(opArr) {
-        return fetch(`${apiURL}/api/update/product/${this.state.productId}`, {
-            method: 'PATCH',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(opArr),
-        }).then(async (response) => {
-            if (response.status == 204) {
-                Alert.alert(
-                    'BuyingAgent',
-                    `${this.state.name} has been edited successfully!`,
-                )
-            }
-            else {
-                Alert.alert('An error occured, please try again');
-                console.error(response)
-            }
-            this.setState({ isLoading: false, isProductUpdatedInDB: true });
+        token(this.props.navigation).then((token) => {
+            if(!token) return;
+            return fetch(`${apiURL}/api/update/product/${this.state.productId}`, {
+                method: 'PATCH',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(opArr),
+            }).then(async (response) => {
+                if (response.status == 204) {
+                    Alert.alert(
+                        'BuyingAgent',
+                        `${this.state.name} has been edited successfully!`,
+                    )
+                }
+                else {
+                    Alert.alert('An error occured, please try again');
+                    console.error(response)
+                }
+                this.setState({ isLoading: false, isProductUpdatedInDB: true });
+            })
+                .catch((error) => {
+                    Alert.alert(error)
+                    console.error(error);
+                    this.setState({ isLoading: false });
+                });
         })
-            .catch((error) => {
-                Alert.alert(error)
-                console.error(error);
-                this.setState({ isLoading: false });
-            });
     }
 
     render() {
@@ -249,7 +253,7 @@ export default class EditProduct extends Component {
                     </ModalDropdown>
                 </View>
                 {!!this.state.formError && (
-                    <Text style={{ color: "red"}}>{this.state.formError}</Text>
+                    <Text style={{ color: "red" }}>{this.state.formError}</Text>
                 )}
                 <View style={{ height: 8 }}></View>
                 <TouchableHighlight
@@ -331,7 +335,7 @@ const styles = StyleSheet.create({
     },
     multilineInput: {
         width: 250,
-        textAlignVertical:'top',
+        textAlignVertical: 'top',
         borderBottomColor: 'gray',
         marginLeft: 8,
         borderBottomWidth: 1,

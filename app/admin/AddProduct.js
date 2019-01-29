@@ -18,39 +18,43 @@ export default class AddProduct extends Component {
     }
 
     AddNewProduct(newProduct) {
-        return fetch(`${apiURL}/api/addnew/newProduct`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newProduct),
-        }).then(async (response) => {
-            if (response.status == 200) {
-                let responseJson = await response.json();
-                Alert.alert(
-                    'BuyingAgent',
-                    `${newProduct.name} has been added to the system successfully!`,
-                    [
-                        {
-                            text: 'Confirm', onPress: () => {
-                                newProduct['id'] = responseJson.id,
-                                this.props.AddHandler(newProduct)
-                            }
-                            , style: 'default'
-                        },
-                    ],
-                    { cancelable: false }
-                )
-            }
-            else Alert.alert('An error occured, please try again')
-            this.setState({ isLoading: false });
-        })
-            .catch((error) => {
-                Alert.alert(error)
-                console.error(error);
+        token(this.props.navigation).then((token) => {
+            if(!token) return;
+            return fetch(`${apiURL}/api/addnew/newProduct`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(newProduct),
+            }).then(async (response) => {
+                if (response.status == 200) {
+                    let responseJson = await response.json();
+                    Alert.alert(
+                        'BuyingAgent',
+                        `${newProduct.name} has been added to the system successfully!`,
+                        [
+                            {
+                                text: 'Confirm', onPress: () => {
+                                    newProduct['id'] = responseJson.id,
+                                        this.props.AddHandler(newProduct)
+                                }
+                                , style: 'default'
+                            },
+                        ],
+                        { cancelable: false }
+                    )
+                }
+                else Alert.alert('An error occured, please try again')
                 this.setState({ isLoading: false });
-            });
+            })
+                .catch((error) => {
+                    Alert.alert(error)
+                    console.error(error);
+                    this.setState({ isLoading: false });
+                });
+        })
     }
 
     IsFormValidated() {
@@ -271,7 +275,7 @@ const styles = StyleSheet.create({
     multilineInput: {
         width: 250,
         borderBottomColor: 'gray',
-        textAlignVertical:'top',
+        textAlignVertical: 'top',
         marginLeft: 8,
         borderBottomWidth: 1,
     },
