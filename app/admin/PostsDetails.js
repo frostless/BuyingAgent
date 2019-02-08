@@ -155,7 +155,7 @@ export default class PostsDetailsView extends Component {
                             <Text style={styles.btnText}>Add</Text>
                         </TouchableHighlight>
                     )}
-                    {renderIf(this.state.addable)(
+                    {renderIf(this.state.addable && !this.state.isLoading)(
                         <AddPost AddHandler={this.AddHandler} CancelAddHandler={this.CancelAddHandler} />
                     )}
                 </View>

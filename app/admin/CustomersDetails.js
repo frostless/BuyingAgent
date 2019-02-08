@@ -143,7 +143,7 @@ export default class CustomersDetailsView extends Component {
             }
           </View>
           <View style={{ height: 8 }}></View>
-          {renderIf(!this.state.addable)(
+          {renderIf(!this.state.addable && !this.state.isLoading)(
             <TouchableHighlight
               style={[styles.button, styles.addButton]}
               onPress={() => {

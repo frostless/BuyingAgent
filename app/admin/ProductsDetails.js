@@ -35,7 +35,7 @@ export default class ProductsDetailsView extends Component {
 
   DeleteEntity(id, index) {
     token(this.props.navigation).then((token) => {
-      if(!token) return;
+      if (!token) return;
       return fetch(`${apiURL}/api/delete/`, {
         method: 'Delete',
         headers: {
@@ -138,18 +138,20 @@ export default class ProductsDetailsView extends Component {
         contentContainerStyle={styles.view}
       >
         <View style={{ paddingLeft: 20, paddingRight: 20, minHeight: Dimensions.get('window').height }}>
-          <SegmentedControl
-            customStyle={{ marginBottom: 8, marginTop: 8 }}
-            callbackiOS={(event) => {
-              let index = event.nativeEvent.selectedSegmentIndex; //1 formular 2 supplements depends on remote db
-              this.setState({ categoryId: Number(index) + 1 })
-              this.forceUpdate();
-            }}
-            callbackAndroid={(index) => {
-              this.setState({ categoryId: Number(index) + 1 })
-              this.forceUpdate();
-            }}
-          />
+          {renderIf(!this.state.isLoading)(
+            <SegmentedControl
+              customStyle={{ marginBottom: 8, marginTop: 8 }}
+              callbackiOS={(event) => {
+                let index = event.nativeEvent.selectedSegmentIndex; //1 formular 2 supplements depends on remote db
+                this.setState({ categoryId: Number(index) + 1 })
+                this.forceUpdate();
+              }}
+              callbackAndroid={(index) => {
+                this.setState({ categoryId: Number(index) + 1 })
+                this.forceUpdate();
+              }}
+            />
+          )}
           <View style={{ flex: 0, alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
             {
               this.state.products.map((item, index) => {
@@ -158,7 +160,7 @@ export default class ProductsDetailsView extends Component {
             }
           </View>
           <View style={{ height: 8 }}></View>
-          {renderIf(!this.state.addable)(
+          {renderIf(!this.state.addable && !this.state.isLoading)(
             <TouchableHighlight
               style={[styles.button, styles.addButton]}
               onPress={() => {
