@@ -98,5 +98,45 @@ export function getAllTransactionsAsyn() {
   })
 }
 
+export function getAllShopsAsyn() {
+  token(this.props.navigation).then((token) => {
+    if(!token) return;
+    return fetch(`${apiURL}/api/reports/allShops`, {
+      method: 'Get',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        if (this.mounted) {
+          this.setState({ shops: responseJson, isLoading: false }, () => this.forceUpdate());
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  })
+}
+
+export function getAllPostsAsyn() {
+  token(this.props.navigation).then((token) => {
+    if(!token) return;
+    return fetch(`${apiURL}/api/reports/allPosts`, {
+      method: 'Get',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        if (this.mounted) {
+          this.setState({ posts: responseJson, isLoading: false }, () => this.forceUpdate());
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  })
+}
+
 
 

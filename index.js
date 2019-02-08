@@ -7,7 +7,7 @@ import { name as appName } from './app.json';
 import { AsyncStorage } from 'react-native';
 import { refresh } from 'react-native-app-auth';
 
-const config = {
+global.config = {
     issuer: 'https://identity.buyingagentapp.com',
     clientId: 'buyingAgent native',
     // clientSecret: '123',

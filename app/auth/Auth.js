@@ -5,16 +5,6 @@ import { Page, Button, ButtonContainer, Heading } from './authComponents';
 import { AsyncStorage } from 'react-native';
 
 
-const config = {
-  issuer: 'https://identity.buyingagentapp.com',
-  clientId: 'buyingAgent native',
-  // clientSecret: '123',
-  redirectUrl: 'app.buyingagent:/oauthredirect',
-  additionalParameters: {},
-  scopes: ['buyingAgentAPI', 'offline_access'],
-  dangerouslyAllowInsecureHttpRequests: true //should not used in production
-};
-
 export default class AuthView extends Component<{}, State> {
 
   authorize = async () => {
