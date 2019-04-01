@@ -13,35 +13,39 @@ export default class AuthLoadingView extends React.Component {
         this._bootstrapAsync();
     }
 
-    IsTokenReadyAsync = async(auth)  => {
-        if (!auth)
+    IsTokenReadyAsync = async () => {
+        let authState, accessTokenExpirationDate, refreshTokenState;
+        try {
+            authState = await AsyncStorage.getItem('authState');
+            if (authState === null)
+                return true;
+            authState = JSON.parse(authState);
+            accessTokenExpirationDate = new Date(authState['accessTokenExpirationDate']);
+            accessTokenExpirationDate = accessTokenExpirationDate.getTime();
+        } catch (error) {
             return true;
-        let authState = JSON.parse(auth);
-        let accessTokenExpirationDate = new Date(authState['accessTokenExpirationDate']);
-        let refreshTokenState;
-        accessTokenExpirationDate = accessTokenExpirationDate.getTime();
+        }
+
         if (accessTokenExpirationDate < Date.now()) {
             try {
                 refreshTokenState = await refresh(config, {
                     refreshToken: authState['refreshToken']
                 });
+                await AsyncStorage.setItem('authState', JSON.stringify(refreshTokenState));
             }
-            catch{
+            catch {
                 return true;
             }
-            AsyncStorage.setItem('authState', JSON.stringify(refreshTokenState));
         }
         return false;
     }
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
-        let authState = await AsyncStorage.getItem('authState');
-
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
 
-        const isAuthNeeded = await(this.IsTokenReadyAsync(authState));   
+        const isAuthNeeded = await(this.IsTokenReadyAsync());   
         this.props.navigation.navigate(isAuthNeeded ? 'Auth' : 'App');
     };
 
