@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import { authorize, refresh, revoke } from 'react-native-app-auth';
 import { Page, Button, ButtonContainer, Heading } from './authComponents';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 export default class AuthView extends Component<{}, State> {
