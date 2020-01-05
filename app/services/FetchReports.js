@@ -149,13 +149,20 @@ export function getAllProfit() {
 
 export function getMonthsProfit() {
   token(this.props.navigation).then((token) => {
-    if(!token) return;
+    if (!token) return;
     return fetch(`${apiURL}/api/reports/monthsProfit`, {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token
       }
-    }).then((response) => response.json())
+    }).then((response) => {
+      // If no transaction in the specified year so far, return a static empty array
+      if (response.ok) {
+        return response.json();
+      } else {
+        return { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0, "12": 0 };
+      }
+    })
       .then((responseJson) => {
         var arr = [];
         for (var o in responseJson) {
@@ -172,6 +179,7 @@ export function getMonthsProfit() {
       });
   })
 }
+
 export function getFormulaProfit() {
   return token(this.props.navigation).then((token) => {
     if(!token) return;
